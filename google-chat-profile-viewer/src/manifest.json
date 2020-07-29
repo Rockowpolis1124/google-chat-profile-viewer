@@ -1,0 +1,13 @@
+{
+  "name": "Penguin Village Profile Viewer",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "",
+  "content_scripts": [
+    {
+      "matches": ["https://chat.google.com/room/*"],
+      "js": ["rx.min.js","script.js"],
+      "css": ["style.css"]
+    }
+  ]
+}
