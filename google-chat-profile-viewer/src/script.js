@@ -1,6 +1,6 @@
 // TODO
 // 村民スプレッドシートの情報を取得する
-const sheet; // getSpreadSheet()...
+// const sheet = getSpreadSheet()...
 
 // 名前の要素を取ってくる。
 // TODO 
