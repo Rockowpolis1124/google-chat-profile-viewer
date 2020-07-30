@@ -3,7 +3,7 @@ Chrome extention for Google Chat (For Personal Use)
 
 # Demo
 
-![キャプチャ](https://user-images.githubusercontent.com/19631320/88781093-e4c3fa00-d1c6-11ea-9965-154c7764d176.PNG)
+![キャプチャ](https://user-images.githubusercontent.com/19631320/88890203-42664e00-d27c-11ea-8a7d-85a3fd02554a.PNG)
 
 # Usage
 
