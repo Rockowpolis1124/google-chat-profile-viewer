@@ -1,3 +1,25 @@
-.ml-10 {
-	margin-left: 10px
+.ml-5pc {
+	margin-left: 5%
+}
+
+.mb-10px {
+	margin-bottom: 5px
+}
+
+.truncateIfTooLong {
+	max-width: 50%;
+	min-width: 25%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.my-d-flex {
+	width: 100%;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.my-d-flex div {
+
 }

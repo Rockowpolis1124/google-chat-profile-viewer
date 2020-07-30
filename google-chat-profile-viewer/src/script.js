@@ -1,63 +1,109 @@
-/*
- * 関数
- */
+(function () {
 
-// 新しいメッセージの受信、または古いログの読み込みによって
-// このコールバック関数が呼び出される。
-// mutationsにはチャットDOM要素たちの親となる要素が含まれているため、
-// この要素の子要素の子孫からチャットの名前の横にある投稿時刻のDOM要素を探し出し、
-// その要素の後ろにスキルタグを追加する。
-function callbackForInsertSkillTags(parentOfAllChatDOM) {
+	/*
+	 * クラス
+	 */
 
-	for (let child of parentOfAllChatDOM.children) {
-		// mutationsの直下にはチャットDOMだけでなく他の要素も交じっている
-		// またチャットDOMの子孫に既にスキルタグを追加している場合もあるため、そのような場合はスキルタグを追加しない。
-
-		if (child.className === 'nF6pT AnmYv' && child.getElementsByClassName('google-chat-profile-viewer').length === 0) {
-
-			child.getElementsByClassName('dAxhmf' /* チャットの名前の横にある投稿時刻のDOM要素が持つクラス */)[0]
-				.insertAdjacentHTML('afterend',
-					'<div class="google-chat-profile-viewer">' +
-						'<a class="ml-10" href="#!">#tag1</a>' + /* TODO ここにはスプレッドシートから取ってきたスキルを入れ込む。その文字列の改行は消しておく。 */
-						'<a class="ml-10" href="#!">#tag2</a>' +
-						'<a class="ml-10" href="#!">#tag3</a>' +
-					'</div>')
+	// 名前をスキルをセットで持たせるためのデータクラス
+	class SkillTagData {
+		constructor(userName, skillTag1, skillTag2, skillTag3, linkToSkillTag1, linkToSkillTag2, linkToSkillTag3) {
+			this.userName = userName
+			this.skillTag1 = skillTag1
+			this.skillTag2 = skillTag2
+			this.skillTag3 = skillTag3
+			this.linkToSkillTag1 = linkToSkillTag1
+			this.linkToSkillTag2 = linkToSkillTag2
+			this.linkToSkillTag3 = linkToSkillTag3
 		}
 	}
-}
 
-// 初回に一度だけ実行し、画面読み込み後チャットログにスキルタグを挿入する。
-function init(parentOfAllChatDOM) {
-	const a = [parentOfAllChatDOM]
-	callbackForInsertSkillTags(parentOfAllChatDOM)
-}
+	/*
+	 * 関数
+	 */
 
-// チャットログを監視し、新しいチャットログが表示されたらスキルタグを挿入する。
-function main(parentOfAllChatDOM) {
+	// 新しいメッセージの受信、または古いログの読み込みによって
+	// このコールバック関数が呼び出される。
+	// チャットの名前の横にある投稿時刻のDOM要素を探し出し、
+	// その要素の後ろにスキルタグを追加する。
+	function callbackForInsertSkillTags(chatLogs, skillTagDataList) {
 
-	// TODO
-	// 村民スプレッドシートの情報を取得する
-	// const sheet = getSpreadSheet()...
+		for (let e of chatLogs) {
+			// 読み込みボタンなどが混在しているので、チャットログだけになるようにフィルタ
+			// また2回スキルタグを追加してしまわないように回避
+			if (e.className === 'nF6pT AnmYv' && e.getElementsByClassName('div.google-chat-profile-viewer').length === 0) {
 
-	// オブザーバーの作成
-	// @doc https://developer.mozilla.org/ja/docs/Web/API/MutationObserver
-	const observer = new MutationObserver(
-		function(mutations) {
-			callbackForInsertSkillTags(mutations[0].target)	
+				skillTagData = getOnesSkill(skillTagDataList, e.getElementsByClassName('njhDLd')[0].textContent /*チャットに表示される名前*/)
+
+				if (skillTagData) {
+					e.getElementsByClassName('NGoCob SAS2Ne' /* チャットの名前の横にある投稿時刻のクラス */)[0]
+						.insertAdjacentHTML('afterend',
+							'<div class="google-chat-profile-viewer my-d-flex mb-10px">' +
+								'<div class="truncateIfTooLong"><a class="ml-5pc" href="' + skillTagData.linkToSkillTag1 + '">#' + skillTagData.skillTag1 + '</a></div>' +
+								'<div class="truncateIfTooLong"><a class="ml-5pc" href="' + skillTagData.linkToSkillTag2 + '">#' + skillTagData.skillTag2 + '</a></div>' +
+								'<div class="truncateIfTooLong"><a class="ml-5pc" href="' + skillTagData.linkToSkillTag3 + '">#' + skillTagData.skillTag3 + '</a></div>' +
+							'</div>')
+				}
+
+			}
+		}
+	}
+
+	// 村民スキルシートからスキル一覧を取得して返す
+	// 通信あり
+	// 今はモック
+	function getSkillTagDataList() {
+		const skillTagDataList = 
+			[
+				new SkillTagData(
+					"Takaaki Murakami",
+					"Angularを始めとしたフロントエンド技術",
+					"Javaを用いたサーバーサイド",
+					"ネコ",
+					"#!",
+					"#!",
+					"#!"
+					)
+			]
+		return skillTagDataList
+	}
+
+	// 村民スキルシートから取得した一覧データとチャットに表示されているユーザー名が合致したら、
+	// その人のスキルを返す
+	function getOnesSkill(skillTagDataList, username) {
+		const skillTagData = skillTagDataList.filter(e => e.userName === username)
+		return skillTagData[0]
+	}
+
+	// 初回に一度だけ実行し、画面読み込み後チャットログにスキルタグを挿入する。
+	function init(parentOfAllChatDOM, skillTagDataList) {
+		callbackForInsertSkillTags(parentOfAllChatDOM.children, skillTagDataList)
+	}
+
+	// チャットログを監視し、新しいチャットログが表示されたらスキルタグを挿入する。
+	function subscribe(parentOfAllChatDOM, skillTagDataList) {
+		// オブザーバーの作成
+		// @doc https://developer.mozilla.org/ja/docs/Web/API/MutationObserver
+		const observer = new MutationObserver(
+			function(mutations) {
+				callbackForInsertSkillTags(mutations[0].target.children, skillTagDataList)	
+			})
+
+		// 監視の開始
+		observer.observe(parentOfAllChatDOM, {
+			childList: true
 		})
+	}
 
-	// 監視の開始
-	observer.observe(parentOfAllChatDOM, {
-		childList: true
-	})
-}
+	/*
+	 * メイン処理
+	 */
 
-/*
- * メイン処理
- */
+	// 監視ターゲット（チャットの親DOM）の取得
+	const parentOfAllChatDOM = document.querySelector("div.jGyvbd.GVSFtd")
+	// 村民スキルシートからスキルタグのデータ一覧を取得
+	const skillTagDataList = getSkillTagDataList()
 
-// 監視ターゲット（チャットの親DOM）の取得
-const parentOfAllChatDOM = document.querySelector("div.jGyvbd.GVSFtd")
+	init(parentOfAllChatDOM, skillTagDataList)
+	subscribe(parentOfAllChatDOM, skillTagDataList)
 
-init(parentOfAllChatDOM)
-main(parentOfAllChatDOM)
+}());
