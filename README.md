@@ -12,4 +12,4 @@ Chrome extention for Google Chat (For Personal Use)
 3. 「パッケージ化されていない拡張機能を読み込む」をクリック
 4. ダウンロードフォルダ内のsrcフォルダを選択する
 
-将来的には限定公開で配布したい。
+将来的には限定公開でChromeのExtentionとしてwebで配布したい。
