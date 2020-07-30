@@ -3,7 +3,7 @@ Chrome extention for Google Chat (For Personal Use)
 
 # Demo
 
-![キャプチャ](https://user-images.githubusercontent.com/19631320/88890203-42664e00-d27c-11ea-8a7d-85a3fd02554a.PNG)
+![キャプチャ](https://user-images.githubusercontent.com/19631320/88903850-464f9b80-d28f-11ea-901a-dd5bed3a77f4.PNG)
 
 村民スキルシートはこちら
 https://docs.google.com/spreadsheets/d/1cHqY_EL3wYm1b8IoruEbKRhbZHdTQGm6gmPcXiczbQ0/edit#gid=0
