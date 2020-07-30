@@ -5,6 +5,9 @@ Chrome extention for Google Chat (For Personal Use)
 
 ![キャプチャ](https://user-images.githubusercontent.com/19631320/88890203-42664e00-d27c-11ea-8a7d-85a3fd02554a.PNG)
 
+村民スキルシートはこちら
+https://docs.google.com/spreadsheets/d/1cHqY_EL3wYm1b8IoruEbKRhbZHdTQGm6gmPcXiczbQ0/edit#gid=0
+
 # Usage
 
 1. このリポジトリをダウンロード
